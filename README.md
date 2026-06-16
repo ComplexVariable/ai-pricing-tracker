@@ -15,22 +15,25 @@ A single-page, zero-dependency web app for developers that shows **which AI mode
 
 ## Running it
 
-It's a static site. Serve the folder locally for the same behavior you will get
-on GitHub Pages:
+It's a static site. Any of these work:
 
 ```bash
+# Option 1 — just open the file
+open index.html            # macOS
+
+# Option 2 — serve locally (recommended; avoids any file:// quirks)
 cd ai-pricing-tracker
-npm run serve
+python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
-No runtime dependencies are required. The browser fetches model data directly from
+No installation or dependencies are required. The browser fetches data directly from
 `https://openrouter.ai/api/v1/models`, which sends `Access-Control-Allow-Origin: *`, so
-cross-origin requests work from the static page.
+cross-origin requests work from a plain static page.
 
 > Note: the **`agents.html`** page reads a local `data/agents.json` file, which browsers block
 > over `file://`. Open it via the local server (`http://localhost:8000/agents.html`), not by
-> double-clicking the file.
+> double-clicking the file. The main `index.html` works either way.
 
 ## How pricing is calculated
 
@@ -62,10 +65,12 @@ and naturally sort to the top; use **“Hide free models”** to exclude them.
 
 ## Subscription agents page
 
-`agents.html` shows pricing for AI coding *agents*. It defaults to an **All plans** comparison —
-every plan with its price, an **Allowance** column (each vendor's own usage unit) and a **Reset**
-column (allowance window) — plus a **TL;DR banner**. Toggle to the **By agent** summary for a
-one-row-per-tool view (Free badge + **“Starts at $X/mo”** entry price + price bar, cheapest-first
+`agents.html` shows pricing for AI coding *agents*. It defaults to an **All plans** comparison
+**grouped by company** (each company's plans listed cheapest-first; click the **Price** header for a
+global cheapest-first sort) — every plan with its price, an **Allowance** column (each vendor's own
+usage unit) and a **Reset** column (allowance window) — plus a **TL;DR banner**. Toggle to the **By
+agent** summary for a one-row-per-tool view (Free badge + **“Starts at $X/mo”** entry price + price
+bar, cheapest-first
 with a **Cheapest** highlight). Because there is **no public real-time pricing API** for these
 products, the data is **curated** in `data/agents.json` and treated as the source of truth. Each
 row shows a **Verified** / **Unverified** price badge; **Allowance** figures are best-effort

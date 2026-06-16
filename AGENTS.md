@@ -58,9 +58,11 @@ parse of the data file, and a manual smoke test in the browser.
   `(wIn*input + wOut*output)/(wIn+wOut)`, default ratio **3:1** input:output; user-selectable
   (3:1, 1:1, input-only, output-only). Models with negative price (`-1` routers) are filtered out.
 - **`agents.html` default view** = **All plans** (one row per plan) with columns
-  `Agent | Plan | Price $/mo | Allowance | Reset | Highlights | Verified | Source`. A toggle
-  switches to a **By agent** summary (one row per tool: Free badge + "Starts at $X/mo" entry price
-  + price bar + Cheapest highlight). A TL;DR banner shows the cheapest paid plan + free-tier count.
+  `Agent | Plan | Price $/mo | Allowance | Reset | Highlights | Verified | Source`, **grouped by
+  company** by default (sorted by Agent, cheapest plan first within each company; click **Price** for
+  a global cheapest-first sort). A toggle switches to a **By agent** summary (one row per tool:
+  Free badge + "Starts at $X/mo" entry price + price bar + Cheapest highlight). A TL;DR banner shows
+  the cheapest paid plan + free-tier count.
 - **Allowance is each vendor's OWN unit** (premium requests / AI requests / messages / usage
   credits / ×multipliers) — **NOT tokens**, and **not comparable across vendors**. Never invent a
   "tokens per plan" number; the data does not exist in that form.

@@ -29,7 +29,7 @@ const VIEWS = {
     ],
   },
   plans: {
-    defaultSort: { key: "monthlyUSD", dir: "asc" },
+    defaultSort: { key: "agentName", dir: "asc" },
     columns: [
       { key: "agentName", label: "Agent", sortable: true },
       { key: "planName", label: "Plan", sortable: true },
@@ -301,10 +301,13 @@ function sortList(list) {
   return list.slice().sort((a, b) => {
     const primary = compareBy(a, b, state.sortKey, dir, !!col.numeric);
     if (primary !== 0) return primary;
-    return (
-      String(a.agentName || "").localeCompare(String(b.agentName || "")) ||
-      String(a.planName || "").localeCompare(String(b.planName || ""))
-    );
+    // Secondary: keep each company together, cheapest plan first within it.
+    const byCompany = String(a.agentName || "").localeCompare(String(b.agentName || ""));
+    if (byCompany !== 0) return byCompany;
+    const ap = typeof a.monthlyUSD === "number" ? a.monthlyUSD : Infinity;
+    const bp = typeof b.monthlyUSD === "number" ? b.monthlyUSD : Infinity;
+    if (ap !== bp) return ap - bp;
+    return String(a.planName || "").localeCompare(String(b.planName || ""));
   });
 }
 
@@ -372,7 +375,17 @@ function render() {
       1,
       ...list.map((r) => (typeof r.monthlyUSD === "number" ? r.monthlyUSD : 0))
     );
+    const grouped = state.sortKey === "agentName";
+    const colCount = VIEWS.plans.columns.length;
+    let currentGroup = null;
     for (const r of list) {
+      if (grouped && r.agentName !== currentGroup) {
+        currentGroup = r.agentName;
+        const gh = document.createElement("tr");
+        gh.className = "group-row";
+        gh.innerHTML = `<td colspan="${colCount}">${escapeHtml(r.agentName)}<span class="group-sub">${escapeHtml(r.company)}</span></td>`;
+        frag.appendChild(gh);
+      }
       const tr = document.createElement("tr");
       const verifiedBadge = r.verified
         ? `<span class="badge badge-verified" title="Verified ${escapeHtml(fmtDate(r.lastVerified))}">Verified</span>`

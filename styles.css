@@ -283,6 +283,11 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--bg-elev-2)
 /* Estimate marker for unverified allowances */
 .est { font-size: 0.62rem; color: var(--text-dim); border: 1px dashed var(--border); border-radius: 4px; padding: 0 4px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.03em; vertical-align: middle; }
 
+/* Company group header rows (All plans, grouped by company) */
+.group-row td { background: var(--bg-elev-2); color: #fff; font-weight: 700; border-top: 2px solid var(--border); }
+.group-row:hover td { background: var(--bg-elev-2); }
+.group-sub { font-weight: 400; color: var(--text-dim); font-size: 0.78rem; margin-left: 10px; }
+
 @media (max-width: 600px) {
   .wrap { padding: 18px 12px 48px; }
   .site-header h1 { font-size: 1.5rem; }
