@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="Live comparison of AI model pricing, sorted cheapest to most expensive. Real-time per-token rates from OpenRouter." />
+  <title>Cheapest AI Models — Live Pricing</title>
+  <link rel="preconnect" href="https://openrouter.ai" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="index.html" class="active" aria-current="page">Per-token models</a>
+      <a href="agents.html">Subscription agents</a>
+    </nav>
+
+    <header class="site-header">
+      <h1>Cheapest AI Models <span class="live-dot" title="Live data"></span></h1>
+      <p class="tagline">
+        Real-time per-token pricing for LLMs &amp; coding models, sorted cheapest &rarr; most expensive.
+        Data is fetched live on page load from the
+        <a href="https://openrouter.ai/docs/api/api-reference/models/get-models" target="_blank" rel="noopener">OpenRouter models API</a>.
+      </p>
+    </header>
+
+    <section class="controls" aria-label="Filters and options">
+      <div class="control grow">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Filter by model or company (e.g. claude, gpt, llama)" autocomplete="off" />
+      </div>
+
+      <div class="control">
+        <label for="companyFilter">Company</label>
+        <select id="companyFilter">
+          <option value="all">All companies</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label for="blendSelect">Sort cost basis</label>
+        <select id="blendSelect">
+          <option value="3:1">Blended &middot; 3:1 input:output (default)</option>
+          <option value="1:1">Blended &middot; 1:1 input:output</option>
+          <option value="1:0">Input only</option>
+          <option value="0:1">Output only</option>
+        </select>
+      </div>
+
+      <div class="control toggles">
+        <label class="checkbox"><input type="checkbox" id="codingOnly" /> Coding models only</label>
+        <label class="checkbox"><input type="checkbox" id="hideFree" /> Hide free models</label>
+      </div>
+
+      <div class="control">
+        <button id="refreshBtn" type="button" class="btn">↻ Refresh</button>
+      </div>
+    </section>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <div id="message" class="message" hidden></div>
+
+    <div class="table-scroll">
+      <table id="pricingTable">
+        <thead>
+          <tr>
+            <th class="rank-col" scope="col">#</th>
+            <th class="sortable" data-key="modelName" scope="col">Model</th>
+            <th class="sortable" data-key="company" scope="col">Company</th>
+            <th class="sortable num" data-key="input" scope="col">Input&nbsp;$/1M</th>
+            <th class="sortable num" data-key="output" scope="col">Output&nbsp;$/1M</th>
+            <th class="sortable num" data-key="blended" scope="col">Blended&nbsp;$/1M</th>
+            <th class="sortable num" data-key="context" scope="col">Context</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <footer class="site-footer">
+      <p>
+        <strong>How to read this:</strong> prices are USD per <strong>1M tokens</strong> (per-token rates &times; 1,000,000),
+        pulled live from OpenRouter. <em>Blended</em> is an estimated effective rate assuming a mix of input/output tokens
+        (default weighting 3 parts input : 1 part output) — change it with the “Sort cost basis” selector. Click any column header to re-sort.
+      </p>
+      <p class="caveat">
+        ⚠️ This compares <strong>per-token model pricing</strong>. Subscription-based coding agents
+        (e.g. Warp, GitHub Copilot, Cursor, Codex CLI) are billed by plan rather than per token, so they aren't directly
+        comparable — see them on the separate <a href="agents.html">Subscription agents</a> page. Pricing changes
+        frequently — always confirm with the provider before relying on it.
+      </p>
+    </footer>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

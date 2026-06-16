@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="Subscription pricing for AI coding agents (Warp, Cursor, GitHub Copilot, Codex CLI, Claude), curated and auto-monitored weekly." />
+  <title>Subscription AI Agents — Pricing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="index.html">Per-token models</a>
+      <a href="agents.html" class="active" aria-current="page">Subscription agents</a>
+    </nav>
+
+    <header class="site-header">
+      <h1>Subscription Coding Agents</h1>
+      <p class="tagline">
+        Plan pricing for agent products that bill per seat / per month (not per token).
+        Sortable cheapest &rarr; most expensive.
+      </p>
+    </header>
+
+    <div class="callout">
+      <strong>Why this is a separate list:</strong> these products are billed by subscription, so they can't be
+      ranked on a $/token basis like the <a href="index.html">live model table</a>. Prices here are
+      <strong>curated</strong> (verified by hand against each vendor's page) and <strong>auto-checked weekly</strong> —
+      a scheduled job re-reads each pricing page and opens a pull request when something changes, so a human can
+      confirm the new numbers. Always click through to the source before relying on a price.
+    </div>
+
+    <div id="tldr" class="tldr" hidden></div>
+
+    <section class="controls" aria-label="Filters">
+      <div class="control">
+        <label>View</label>
+        <div class="segmented" id="viewToggle" role="tablist" aria-label="View mode">
+          <button type="button" class="seg" data-view="agents" role="tab" aria-selected="false">By agent</button>
+          <button type="button" class="seg active" data-view="plans" role="tab" aria-selected="true">All plans</button>
+        </div>
+      </div>
+      <div class="control grow">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Filter by agent, company, or plan (e.g. warp, copilot, free)" autocomplete="off" />
+      </div>
+      <div class="control toggles" id="onlyPaidWrap">
+        <label class="checkbox"><input type="checkbox" id="onlyPaid" /> Hide free plans</label>
+      </div>
+    </section>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <div id="message" class="message" hidden></div>
+
+    <div class="table-scroll">
+      <table id="agentsTable">
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <footer class="site-footer">
+      <p>
+        <strong>Notes:</strong> prices are USD per month; paid plans are per seat unless shown as <em>Usage-based</em>.
+        <strong>Allowance</strong> is each vendor's <em>own</em> unit (premium / AI requests, messages, usage credits, or
+        ×multipliers) — <strong>not tokens</strong>, and <strong>not comparable across vendors</strong>; figures tagged
+        <span class="est">est.</span> are best-effort and unconfirmed. <strong>Reset</strong> is the allowance window
+        (monthly vs rolling). A <span class="badge badge-unverified">Unverified</span> badge means the price still needs a
+        manual pass (the weekly monitor flags changes but never overwrites values automatically).
+      </p>
+      <p class="caveat">
+        Authoritative data lives in <code>data/agents.json</code>; the weekly monitor writes detected price signals to
+        <code>data/agents.snapshot.json</code>. Codex CLI has no standalone subscription — it's bundled with ChatGPT
+        plans or billed per token via the API (see the <a href="index.html">model table</a>).
+      </p>
+    </footer>
+  </div>
+
+  <script src="agents.js" defer></script>
+</body>
+</html>

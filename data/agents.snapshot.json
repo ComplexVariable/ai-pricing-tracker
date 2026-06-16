@@ -1,0 +1,95 @@
+{
+  "lastChecked": "2026-06-16T11:20:55.844Z",
+  "agents": {
+    "warp": {
+      "sourceUrl": "https://www.warp.dev/pricing",
+      "status": 200,
+      "detectedPrices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        18,
+        20,
+        22,
+        26,
+        32,
+        33,
+        45,
+        50,
+        100,
+        180,
+        200
+      ],
+      "contentHash": "6a53a3bc0bbc1b49",
+      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "error": null
+    },
+    "cursor": {
+      "sourceUrl": "https://www.cursor.com/pricing",
+      "status": 200,
+      "detectedPrices": [
+        1,
+        3,
+        17,
+        20,
+        26,
+        40
+      ],
+      "contentHash": "797f54240a82897c",
+      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "error": null
+    },
+    "copilot": {
+      "sourceUrl": "https://github.com/features/copilot/plans",
+      "status": 200,
+      "detectedPrices": [
+        0.01,
+        5,
+        10,
+        15,
+        19,
+        31,
+        39,
+        70,
+        100,
+        200
+      ],
+      "contentHash": "b6e145af54512af8",
+      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "error": null
+    },
+    "codex-cli": {
+      "sourceUrl": "https://openai.com/codex/",
+      "status": 403,
+      "detectedPrices": [],
+      "contentHash": "",
+      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "error": null
+    },
+    "claude": {
+      "sourceUrl": "https://www.anthropic.com/pricing",
+      "status": 200,
+      "detectedPrices": [
+        0.05,
+        0.08,
+        1,
+        5,
+        10,
+        17,
+        20,
+        25,
+        100,
+        125,
+        200
+      ],
+      "contentHash": "2e49a36e1026a760",
+      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "error": null
+    }
+  }
+}

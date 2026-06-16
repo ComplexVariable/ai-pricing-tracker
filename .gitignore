@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Node (only if deps are ever added)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Editors
+.vscode/
+.idea/
+
+# Logs
+*.log

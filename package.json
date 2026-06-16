@@ -1,0 +1,14 @@
+{
+  "name": "ai-pricing-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Live per-token AI model pricing table + curated, auto-monitored subscription-agent pricing.",
+  "scripts": {
+    "update-agents": "node scripts/update-agents.mjs",
+    "serve": "python3 -m http.server 8000"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
