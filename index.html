@@ -25,6 +25,17 @@
       </p>
     </header>
 
+    <div class="callout legend">
+      <div class="legend-item">
+        <strong class="legend-key">Quality</strong>
+        <span class="legend-desc">Design Arena <strong>ELO</strong> — a coding/UI skill rating from head-to-head match-ups (like chess). <strong>Higher = better</strong> (here ≈&nbsp;900–1400). <strong>“—”</strong> = not benchmarked (~⅓ of models).</span>
+      </div>
+      <div class="legend-item">
+        <strong class="legend-key">Balance</strong>
+        <span class="legend-desc"><strong>0–100</strong> value score — <strong>100&nbsp;=&nbsp;best</strong>, <strong>0&nbsp;=&nbsp;worst</strong> (relative to models shown). Blends price &amp; quality; set the mix with the <strong>Cheapest&nbsp;↔&nbsp;Best</strong> slider.</span>
+      </div>
+    </div>
+
     <section class="controls" aria-label="Filters and options">
       <div class="control grow">
         <label for="search">Search</label>
@@ -48,6 +59,11 @@
         </select>
       </div>
 
+      <div class="control">
+        <label for="balanceSlider">Cheapest &harr; Best (quality)</label>
+        <input id="balanceSlider" type="range" min="0" max="100" value="50" title="Drag to weight price vs. quality, then rank by Balance" />
+      </div>
+
       <div class="control toggles">
         <label class="checkbox"><input type="checkbox" id="codingOnly" /> Coding models only</label>
         <label class="checkbox"><input type="checkbox" id="hideFree" /> Hide free models</label>
@@ -69,9 +85,11 @@
             <th class="rank-col" scope="col">#</th>
             <th class="sortable" data-key="modelName" scope="col">Model</th>
             <th class="sortable" data-key="company" scope="col">Company</th>
-            <th class="sortable num" data-key="input" scope="col">Input&nbsp;$/1M</th>
-            <th class="sortable num" data-key="output" scope="col">Output&nbsp;$/1M</th>
-            <th class="sortable num" data-key="blended" scope="col">Blended&nbsp;$/1M</th>
+            <th class="sortable num" data-key="input" scope="col">Input $/1M</th>
+            <th class="sortable num" data-key="output" scope="col">Output $/1M</th>
+            <th class="sortable num" data-key="blended" scope="col">Blended $/1M</th>
+            <th class="sortable num" data-key="qualityElo" scope="col">Quality</th>
+            <th class="sortable num" data-key="balance" scope="col">Balance</th>
             <th class="sortable num" data-key="context" scope="col">Context</th>
           </tr>
         </thead>
@@ -84,6 +102,12 @@
         <strong>How to read this:</strong> prices are USD per <strong>1M tokens</strong> (per-token rates &times; 1,000,000),
         pulled live from OpenRouter. <em>Blended</em> is an estimated effective rate assuming a mix of input/output tokens
         (default weighting 3 parts input : 1 part output) — change it with the “Sort cost basis” selector. Click any column header to re-sort.
+      </p>
+      <p>
+        <strong>Quality</strong> is the average Design Arena ELO (a coding/design-output benchmark) that OpenRouter exposes —
+        only about a third of models have it; the rest show “—”. <strong>Balance</strong> blends price and quality into a
+        0–100 score: drag the <strong>Cheapest ↔ Best</strong> slider to weight it (left = cheapest, right = highest quality),
+        which ranks the table by Balance. Models without a quality score are treated as unrated.
       </p>
       <p class="caveat">
         ⚠️ This compares <strong>per-token model pricing</strong>. Subscription-based coding agents

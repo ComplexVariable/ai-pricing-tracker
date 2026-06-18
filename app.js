@@ -43,7 +43,7 @@ const COMPANY_NAMES = {
 };
 
 // Numeric columns (everything else sorts as text).
-const NUMERIC_KEYS = new Set(["input", "output", "blended", "context"]);
+const NUMERIC_KEYS = new Set(["input", "output", "blended", "qualityElo", "balance", "context"]);
 
 /* ------------------------------ State ----------------------------- */
 const state = {
@@ -51,6 +51,7 @@ const state = {
   sortKey: "blended",
   sortDir: "asc",
   blend: "3:1",        // input:output weighting used for the blended column
+  balance: 0.5,        // Cheapest(0) <-> Best-quality(1) weighting for the Balance score
   search: "",
   company: "all",
   codingOnly: false,
@@ -64,6 +65,7 @@ function cacheEls() {
   els.search = document.getElementById("search");
   els.company = document.getElementById("companyFilter");
   els.blend = document.getElementById("blendSelect");
+  els.balanceSlider = document.getElementById("balanceSlider");
   els.codingOnly = document.getElementById("codingOnly");
   els.hideFree = document.getElementById("hideFree");
   els.refresh = document.getElementById("refreshBtn");
@@ -128,6 +130,20 @@ function fmtContext(n) {
   return String(n);
 }
 
+function fmtElo(v) {
+  return v == null ? "—" : String(v);
+}
+
+// Balance score 0..1 -> mini bar + 0..100 number.
+function balanceCell(b) {
+  if (b == null || !Number.isFinite(b)) return "—";
+  const pct = Math.round(b * 100);
+  return (
+    `<span class="pricebar-wrap"><span class="pricebar"><span style="width:${Math.max(2, pct)}%"></span></span>` +
+    `<span class="price-amt">${pct}</span></span>`
+  );
+}
+
 function fmtTime(date) {
   try {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -147,6 +163,19 @@ function transform(raw) {
     (raw.top_provider && raw.top_provider.context_length) ||
     null;
 
+  // Quality proxy: average Design Arena ELO from OpenRouter's benchmarks
+  // (coding/design-output quality; present on only ~1/3 of models).
+  let qualityElo = null;
+  const da = raw.benchmarks && raw.benchmarks.design_arena;
+  if (Array.isArray(da) && da.length) {
+    const elos = da
+      .map((e) => (e && typeof e.elo === "number" ? e.elo : null))
+      .filter((v) => v != null);
+    if (elos.length) {
+      qualityElo = Math.round(elos.reduce((s, v) => s + v, 0) / elos.length);
+    }
+  }
+
   // Valid = both per-token prices known and non-negative. This drops
   // meta/router models that report "-1" (variable/un-priced).
   const valid =
@@ -160,6 +189,8 @@ function transform(raw) {
     input,
     output,
     context,
+    qualityElo,
+    balance: null,
     isFree: input === 0 && output === 0,
     valid,
   };
@@ -262,8 +293,13 @@ function sortModels(list) {
     }
 
     if (numeric) {
-      av = av == null ? Infinity : av;
-      bv = bv == null ? Infinity : bv;
+      // Unknown values always sort last, regardless of direction.
+      const aNull = av == null;
+      const bNull = bv == null;
+      if (aNull || bNull) {
+        if (aNull && bNull) return a.modelName.localeCompare(b.modelName);
+        return aNull ? 1 : -1;
+      }
       if (av !== bv) return (av - bv) * dir;
       // tie-breaker: cheaper blended, then name
       const ab = blendedCost(a.input, a.output, blend);
@@ -276,9 +312,33 @@ function sortModels(list) {
   });
 }
 
+/* --------------------- Balance (price vs quality) ----------------- */
+// Attaches m.balance in [0,1] = w*qualityNorm + (1-w)*cheapnessNorm,
+// normalized over the currently-visible set. w = state.balance.
+function computeBalance(list) {
+  const w = state.balance;
+  const blend = state.blend;
+  const elos = list.map((m) => m.qualityElo).filter((v) => v != null);
+  const minE = elos.length ? Math.min(...elos) : 0;
+  const maxE = elos.length ? Math.max(...elos) : 0;
+  const prices = list.map((m) => blendedCost(m.input, m.output, blend));
+  const minP = prices.length ? Math.min(...prices) : 0;
+  const maxP = prices.length ? Math.max(...prices) : 0;
+
+  list.forEach((m) => {
+    const qNorm =
+      m.qualityElo == null ? 0 : maxE > minE ? (m.qualityElo - minE) / (maxE - minE) : 1;
+    const p = blendedCost(m.input, m.output, blend);
+    const cheapNorm = maxP > minP ? (maxP - p) / (maxP - minP) : 1;
+    m.balance = w * qNorm + (1 - w) * cheapNorm;
+  });
+}
+
 /* ----------------------------- Render ----------------------------- */
 function render() {
-  const visible = sortModels(getVisibleModels());
+  const filtered = getVisibleModels();
+  computeBalance(filtered);
+  const visible = sortModels(filtered);
   const blend = state.blend;
 
   els.tbody.innerHTML = "";
@@ -286,27 +346,37 @@ function render() {
 
   visible.forEach((m, i) => {
     const tr = document.createElement("tr");
-    if (i === 0 && state.sortKey === "blended" && state.sortDir === "asc") {
+    if (
+      i === 0 &&
+      ((state.sortKey === "blended" && state.sortDir === "asc") ||
+        (state.sortKey === "balance" && state.sortDir === "desc"))
+    ) {
       tr.className = "is-cheapest";
     }
 
     const blended = blendedCost(m.input, m.output, blend);
     const freeBadge = m.isFree ? '<span class="badge badge-free">Free</span>' : "";
-    const cheapestBadge =
-      i === 0 && state.sortKey === "blended" && state.sortDir === "asc" && !m.isFree
-        ? '<span class="badge badge-cheapest">Cheapest</span>'
-        : "";
+    let topBadge = "";
+    if (i === 0) {
+      if (state.sortKey === "blended" && state.sortDir === "asc" && !m.isFree) {
+        topBadge = '<span class="badge badge-cheapest">Cheapest</span>';
+      } else if (state.sortKey === "balance" && state.sortDir === "desc") {
+        topBadge = '<span class="badge badge-cheapest">Best value</span>';
+      }
+    }
 
     tr.innerHTML = `
       <td class="rank-col">${i + 1}</td>
       <td>
-        <span class="model-name">${escapeHtml(m.modelName)}</span>${freeBadge}${cheapestBadge}
+        <span class="model-name">${escapeHtml(m.modelName)}</span>${freeBadge}${topBadge}
         <span class="model-id">${escapeHtml(m.id)}</span>
       </td>
       <td class="company-cell">${escapeHtml(m.company)}</td>
       <td class="num">${fmtUSD(m.input)}</td>
       <td class="num">${fmtUSD(m.output)}</td>
       <td class="num blended-cell">${fmtUSD(blended)}</td>
+      <td class="num">${fmtElo(m.qualityElo)}</td>
+      <td class="num">${balanceCell(m.balance)}</td>
       <td class="num">${fmtContext(m.context)}</td>
     `;
     frag.appendChild(tr);
@@ -370,6 +440,7 @@ function savePrefs() {
         sortKey: state.sortKey,
         sortDir: state.sortDir,
         blend: state.blend,
+        balance: state.balance,
         codingOnly: state.codingOnly,
         hideFree: state.hideFree,
       })
@@ -387,6 +458,7 @@ function loadPrefs() {
     if (p.sortKey) state.sortKey = p.sortKey;
     if (p.sortDir) state.sortDir = p.sortDir;
     if (p.blend) state.blend = p.blend;
+    if (typeof p.balance === "number") state.balance = p.balance;
     state.codingOnly = !!p.codingOnly;
     state.hideFree = !!p.hideFree;
   } catch (_) {
@@ -396,6 +468,7 @@ function loadPrefs() {
 
 function syncControlsFromState() {
   els.blend.value = state.blend;
+  els.balanceSlider.value = String(Math.round(state.balance * 100));
   els.codingOnly.checked = state.codingOnly;
   els.hideFree.checked = state.hideFree;
 }
@@ -433,6 +506,15 @@ function wireEvents() {
     render();
   });
 
+  els.balanceSlider.addEventListener("input", (e) => {
+    state.balance = Number(e.target.value) / 100;
+    // Moving the slider implies "rank by this balance".
+    state.sortKey = "balance";
+    state.sortDir = "desc";
+    savePrefs();
+    render();
+  });
+
   els.hideFree.addEventListener("change", (e) => {
     state.hideFree = e.target.checked;
     savePrefs();
@@ -455,9 +537,9 @@ function wireEvents() {
         state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
       } else {
         state.sortKey = key;
-        // Numeric columns default ascending (cheapest/smallest first);
-        // text columns also ascending (A→Z).
-        state.sortDir = "asc";
+        // Quality & Balance are "higher is better" → default descending;
+        // everything else ascending (cheapest/smallest/A→Z first).
+        state.sortDir = key === "balance" || key === "qualityElo" ? "desc" : "asc";
       }
       savePrefs();
       render();
