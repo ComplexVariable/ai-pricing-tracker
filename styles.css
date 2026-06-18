@@ -28,7 +28,7 @@ html, body {
 a { color: var(--accent); }
 
 .wrap {
-  max-width: 1100px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: 28px 20px 64px;
 }
@@ -91,6 +91,7 @@ a { color: var(--accent); }
   min-width: 180px;
 }
 .control input[type="search"] { width: 100%; }
+.control input[type="range"] { width: 190px; accent-color: var(--accent); cursor: pointer; }
 .control input:focus,
 .control select:focus {
   outline: none;
@@ -152,7 +153,7 @@ a { color: var(--accent); }
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
+  min-width: 760px;
 }
 thead th {
   position: sticky;
@@ -160,12 +161,13 @@ thead th {
   background: var(--bg-elev-2);
   color: var(--text);
   text-align: left;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 12px 14px;
+  letter-spacing: 0.03em;
+  padding: 10px 9px;
   border-bottom: 1px solid var(--border);
-  white-space: nowrap;
+  white-space: normal;
+  vertical-align: bottom;
   z-index: 1;
 }
 th.num, td.num { text-align: right; }
@@ -177,17 +179,18 @@ th.sortable[aria-sort="descending"]::after { content: " ↓"; opacity: 1; color:
 th.sortable:hover { color: #fff; background: #232c3b; }
 
 tbody td {
-  padding: 11px 14px;
+  padding: 9px 9px;
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
+  font-size: 0.88rem;
 }
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover { background: var(--row-hover); }
 
 .rank-col { color: var(--text-dim); font-variant-numeric: tabular-nums; text-align: right; }
 .model-name { font-weight: 600; }
-.model-id { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
-.company-cell { white-space: nowrap; }
+.model-id { display: block; font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim); margin-top: 2px; word-break: break-all; }
+.company-cell { white-space: normal; }
 td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .blended-cell { color: #fff; font-weight: 600; }
 
@@ -242,6 +245,19 @@ tr.is-cheapest td { background: rgba(59, 130, 246, 0.06); }
 }
 .callout strong { color: var(--text); }
 
+/* Scannable legend inside a callout */
+.legend { display: flex; flex-wrap: wrap; gap: 12px 30px; }
+.legend-item { display: flex; gap: 10px; align-items: baseline; flex: 1 1 330px; }
+.legend-key {
+  flex: 0 0 auto;
+  font-weight: 700; color: #fff;
+  background: var(--accent); border-radius: 6px;
+  padding: 2px 9px; font-size: 0.72rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.legend-desc { color: var(--text-dim); font-size: 0.84rem; line-height: 1.5; }
+.legend-desc strong { color: var(--text); }
+
 /* Verified badges + source link (agents page) */
 .badge-verified { background: rgba(34, 197, 94, 0.15); color: var(--free); border: 1px solid rgba(34,197,94,0.4); }
 .badge-unverified { background: rgba(234, 179, 8, 0.13); color: #facc15; border: 1px solid rgba(234,179,8,0.4); }
@@ -271,10 +287,10 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--bg-elev-2)
 .seg:hover:not(.active) { color: #fff; background: var(--bg-elev-2); }
 
 /* Price bar */
-.pricebar-wrap { display: inline-flex; align-items: center; gap: 10px; justify-content: flex-end; }
-.pricebar { position: relative; flex: 0 0 84px; width: 84px; height: 8px; background: var(--bg-elev-2); border-radius: 999px; overflow: hidden; }
+.pricebar-wrap { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.pricebar { position: relative; flex: 0 0 54px; width: 54px; height: 8px; background: var(--bg-elev-2); border-radius: 999px; overflow: hidden; }
 .pricebar > span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
-.price-amt { font-family: var(--mono); font-variant-numeric: tabular-nums; min-width: 52px; text-align: right; }
+.price-amt { font-family: var(--mono); font-variant-numeric: tabular-nums; min-width: 40px; text-align: right; }
 
 /* Yes/No free badge */
 .badge-yes { background: rgba(34, 197, 94, 0.15); color: var(--free); border: 1px solid rgba(34,197,94,0.4); }
@@ -292,5 +308,5 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--bg-elev-2)
   .wrap { padding: 18px 12px 48px; }
   .site-header h1 { font-size: 1.5rem; }
   .control.grow { flex-basis: 100%; }
-  .pricebar { flex-basis: 56px; width: 56px; }
+  .pricebar { flex-basis: 44px; width: 44px; }
 }

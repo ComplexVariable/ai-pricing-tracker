@@ -8,6 +8,7 @@ A single-page, zero-dependency web app for developers that shows **which AI mode
 - **Sorted cheapest → most expensive** by default, using a blended cost estimate.
 - **Sort by any column** — click any header (Model, Company, Input, Output, Blended, Context) to re-sort; click again to reverse.
 - **Adjustable cost basis** — compare by a blended rate (default **3:1** input:output), **1:1**, **input only**, or **output only**.
+- **Quality + value** — a **Quality** column (Design Arena ELO from OpenRouter, where available) and a **Cheapest ↔ Best** slider that ranks models by a blended price/quality **Balance** score (cheapest ≠ best).
 - **Filters** — free-text search, filter by company, "coding models only" (uses the API's `programming` category), and "hide free models".
 - **No API key, no build step** — it's just static HTML/CSS/JS.
 - **Subscription agents page** (`agents.html`) — a separate, curated comparison of plan pricing for AI coding *agents* (Warp, Cursor, GitHub Copilot, Codex CLI, Claude), with per-plan **Allowance** and **Reset** columns, since those bill per seat/month rather than per token.

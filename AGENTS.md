@@ -57,6 +57,11 @@ parse of the data file, and a manual smoke test in the browser.
 - **`index.html` default sort** = "Blended" `$/1M`, ascending. Blended is a weighted estimate:
   `(wIn*input + wOut*output)/(wIn+wOut)`, default ratio **3:1** input:output; user-selectable
   (3:1, 1:1, input-only, output-only). Models with negative price (`-1` routers) are filtered out.
+- **Quality & Balance (index.html).** `Quality` = average OpenRouter **Design Arena** ELO
+  (coding/design-output benchmark; only ~1/3 of models have it, others are `null` → "—"). `Balance`
+  = `w*qualityNorm + (1-w)*cheapnessNorm`, normalized over the visible set, where `w` (`state.balance`,
+  0–1) is the **Cheapest↔Best** slider; moving the slider sorts by Balance (desc). Unrated models get
+  qualityNorm 0. Quality is coding/design-specific, not general intelligence — don't oversell it.
 - **`agents.html` default view** = **All plans** (one row per plan) with columns
   `Agent | Plan | Price $/mo | Allowance | Reset | Highlights | Verified | Source`, **grouped by
   company** by default (sorted by Agent, cheapest plan first within each company; click **Price** for
