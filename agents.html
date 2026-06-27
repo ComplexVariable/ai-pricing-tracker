@@ -41,6 +41,14 @@
           <button type="button" class="seg active" data-view="plans" role="tab" aria-selected="true">All plans</button>
         </div>
       </div>
+      <div class="control">
+        <label>Audience</label>
+        <div class="segmented" id="audienceToggle" role="tablist" aria-label="Audience">
+          <button type="button" class="seg active" data-aud="individual" role="tab" aria-selected="true">Individual</button>
+          <button type="button" class="seg" data-aud="business" role="tab" aria-selected="false">Business</button>
+          <button type="button" class="seg" data-aud="all" role="tab" aria-selected="false">All</button>
+        </div>
+      </div>
       <div class="control grow">
         <label for="search">Search</label>
         <input id="search" type="search" placeholder="Filter by agent, company, or plan (e.g. warp, copilot, free)" autocomplete="off" />
@@ -62,12 +70,13 @@
 
     <footer class="site-footer">
       <p>
-        <strong>Notes:</strong> prices are USD per month; paid plans are per seat unless shown as <em>Usage-based</em>.
+        <strong>Notes:</strong> prices are <strong>US list prices</strong> in USD per month — your local price may differ by <strong>currency, VAT, and region</strong>. Paid plans are per seat unless shown as <em>Usage-based</em>.
         <strong>Allowance</strong> is each vendor's <em>own</em> unit (premium / AI requests, messages, usage credits, or
         ×multipliers) — <strong>not tokens</strong>, and <strong>not comparable across vendors</strong>; figures tagged
         <span class="est">est.</span> are best-effort and unconfirmed. <strong>Reset</strong> is the allowance window
         (monthly vs rolling). A <span class="badge badge-unverified">Unverified</span> badge means the price still needs a
         manual pass (the weekly monitor flags changes but never overwrites values automatically).
+        Use the <strong>Individual / Business</strong> toggle to switch between personal plans and team/enterprise plans.
       </p>
       <p class="caveat">
         Authoritative data lives in <code>data/agents.json</code>; the weekly monitor writes detected price signals to

@@ -1,6 +1,4 @@
-# Cheapest AI Models — Live Pricing 
-
-Available Here : [AI Pricing Tracker](https://complexvariable.github.io/ai-pricing-tracker/)
+# Cheapest AI Models — Live Pricing
 
 A single-page, zero-dependency web app for developers that shows **which AI model is cheapest to use right now**, in a table sorted from cheapest to most expensive. Pricing is fetched **live on page load** from the [OpenRouter models API](https://openrouter.ai/docs/api/api-reference/models/get-models).
 
