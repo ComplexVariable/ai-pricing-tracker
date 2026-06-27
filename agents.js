@@ -45,7 +45,6 @@ const VIEWS = {
 
 const state = {
   rows: [],        // flattened plan rows
-  agents: [],      // aggregated per-agent rows
   agentCount: 0,
   dataUpdated: null,
   lastChecked: null,
@@ -54,6 +53,7 @@ const state = {
   sortDir: "asc",
   search: "",
   onlyPaid: false,
+  audience: "individual", // individual | business | all
 };
 
 const els = {};
@@ -62,6 +62,7 @@ function cacheEls() {
   els.onlyPaid = document.getElementById("onlyPaid");
   els.onlyPaidWrap = document.getElementById("onlyPaidWrap");
   els.viewToggle = document.getElementById("viewToggle");
+  els.audienceToggle = document.getElementById("audienceToggle");
   els.tldr = document.getElementById("tldr");
   els.status = document.getElementById("status");
   els.message = document.getElementById("message");
@@ -129,10 +130,9 @@ async function loadData() {
   } catch (_) { /* snapshot optional */ }
 
   buildRows(data, snapshot);
-  aggregate();
   hideMessage();
   setView(state.view, false);
-  renderTLDR();
+  setAudience(state.audience);
   render();
 }
 
@@ -155,6 +155,7 @@ function buildRows(data, snapshot) {
         monthlyUSD: p.monthlyUSD === undefined ? null : p.monthlyUSD,
         billing: p.billing || "",
         priceLabel: p.priceLabel || null,
+        audience: p.audience || "individual",
         limit: p.limit || "",
         reset: p.reset || "",
         limitsVerified: !!a.limitsVerified,
@@ -169,9 +170,17 @@ function buildRows(data, snapshot) {
   state.lastChecked = snapshot && snapshot.lastChecked ? snapshot.lastChecked : null;
 }
 
-function aggregate() {
+// Rows in the currently selected audience (individual | business | all).
+function audienceRows() {
+  return state.audience === "all"
+    ? state.rows
+    : state.rows.filter((r) => r.audience === state.audience);
+}
+
+// Aggregate plan rows into per-agent summaries (entry price, free tier, count).
+function buildAgents(rows) {
   const map = new Map();
-  for (const r of state.rows) {
+  for (const r of rows) {
     if (!map.has(r.agentId)) {
       map.set(r.agentId, {
         agentId: r.agentId,
@@ -202,7 +211,7 @@ function aggregate() {
       planCount: a.plans.length,
     });
   }
-  state.agents = agents;
+  return agents;
 }
 
 /* --------------------------- UI messages -------------------------- */
@@ -234,22 +243,25 @@ function hideMessage() {
 
 /* ------------------------------ TL;DR ----------------------------- */
 function renderTLDR() {
+  const rows = audienceRows();
   let cheapest = null;
-  for (const r of state.rows) {
+  for (const r of rows) {
     if (typeof r.monthlyUSD === "number" && r.monthlyUSD > 0) {
       if (!cheapest || r.monthlyUSD < cheapest.monthlyUSD) cheapest = r;
     }
   }
-  const freeCount = state.agents.filter((a) => a.hasFree).length;
-  const total = state.agents.length;
+  const agents = buildAgents(rows);
+  const freeCount = agents.filter((a) => a.hasFree).length;
+  const total = agents.length;
+  const audWord = state.audience === "all" ? "" : state.audience + " ";
   const bits = [];
   if (cheapest) {
     bits.push(
-      `<div><span class="tldr-key">Cheapest paid</span><strong>${escapeHtml(cheapest.agentName)} · ${escapeHtml(cheapest.planName)}</strong> — $${cheapest.monthlyUSD}/user·mo</div>`
+      `<div><span class="tldr-key">Cheapest ${audWord}paid</span><strong>${escapeHtml(cheapest.agentName)} · ${escapeHtml(cheapest.planName)}</strong> — $${cheapest.monthlyUSD}/mo</div>`
     );
   }
   bits.push(
-    `<div><span class="tldr-key">Free tier</span><strong>${freeCount}</strong> of ${total} tools offer one</div>`
+    `<div><span class="tldr-key">Free tier</span><strong>${freeCount}</strong> of ${total} ${audWord}tools offer one</div>`
   );
   els.tldr.innerHTML = bits.join("");
   els.tldr.hidden = false;
@@ -257,9 +269,10 @@ function renderTLDR() {
 
 /* --------------------------- Filtering ---------------------------- */
 function getVisibleAgents() {
+  const agents = buildAgents(audienceRows());
   const q = state.search.trim().toLowerCase();
-  if (!q) return state.agents;
-  return state.agents.filter((a) => {
+  if (!q) return agents;
+  return agents.filter((a) => {
     const planText = a.plans.map((p) => `${p.planName} ${p.highlights}`).join(" ");
     const hay = `${a.agentName} ${a.company} ${a.category} ${planText}`.toLowerCase();
     return hay.includes(q);
@@ -268,7 +281,7 @@ function getVisibleAgents() {
 
 function getVisiblePlans() {
   const q = state.search.trim().toLowerCase();
-  return state.rows.filter((r) => {
+  return audienceRows().filter((r) => {
     if (state.onlyPaid && r.monthlyUSD === 0) return false;
     if (q) {
       const hay = `${r.agentName} ${r.company} ${r.planName} ${r.highlights}`.toLowerCase();
@@ -332,6 +345,7 @@ function renderHeader() {
 }
 
 function render() {
+  renderTLDR();
   renderHeader();
   els.tbody.innerHTML = "";
   const frag = document.createDocumentFragment();
@@ -412,16 +426,22 @@ function render() {
       frag.appendChild(tr);
     }
     els.tbody.appendChild(frag);
-    updateStatus(list.length, "plans");
+    const nAgents = new Set(list.map((r) => r.agentId)).size;
+    updateStatus(list.length, "plans", nAgents);
   }
 }
 
-function updateStatus(shown, view) {
-  const noun = view === "agents" ? `agent${shown === 1 ? "" : "s"}` : `plan${shown === 1 ? "" : "s"}`;
+function updateStatus(shown, view, nAgents) {
+  const audWord = state.audience === "all" ? "" : state.audience + " ";
+  let head;
+  if (view === "agents") {
+    head = `${shown} agent${shown === 1 ? "" : "s"}`;
+    if (state.audience !== "all") head += ` · ${state.audience} plans`;
+  } else {
+    head = `${shown} ${audWord}plan${shown === 1 ? "" : "s"} across ${nAgents} agent${nAgents === 1 ? "" : "s"}`;
+  }
   const parts = [
-    view === "agents"
-      ? `${shown} ${noun}`
-      : `${shown} ${noun} across ${state.agentCount} agents`,
+    head,
     `data verified ${fmtDate(state.dataUpdated)}`,
     `auto-checked ${state.lastChecked ? fmtDate(state.lastChecked) : "not yet run"}`,
   ];
@@ -439,6 +459,15 @@ function setView(view, keepSort) {
   els.onlyPaidWrap.hidden = view !== "plans";
   els.viewToggle.querySelectorAll(".seg").forEach((b) => {
     const on = b.dataset.view === view;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+  });
+}
+
+function setAudience(aud) {
+  state.audience = aud;
+  els.audienceToggle.querySelectorAll(".seg").forEach((b) => {
+    const on = b.dataset.aud === aud;
     b.classList.toggle("active", on);
     b.setAttribute("aria-selected", on ? "true" : "false");
   });
@@ -462,6 +491,13 @@ function wireEvents() {
     const btn = e.target.closest(".seg");
     if (!btn || btn.dataset.view === state.view) return;
     setView(btn.dataset.view, false);
+    render();
+  });
+
+  els.audienceToggle.addEventListener("click", (e) => {
+    const btn = e.target.closest(".seg");
+    if (!btn || btn.dataset.aud === state.audience) return;
+    setAudience(btn.dataset.aud);
     render();
   });
 
