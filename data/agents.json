@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-16",
+  "lastUpdated": "2026-06-27",
   "currency": "USD",
   "note": "Curated subscription pricing for AI coding agents. These products bill by plan (per seat / per month), not per token, so they are NOT directly comparable to the live per-token model table. 'limit' is each vendor's OWN allowance unit (premium requests, AI requests, messages, usage credits, or relative multipliers) — NOT tokens — and units are not comparable across vendors. Allowance/reset values are best-effort estimates pending manual confirmation. Always confirm at the source.",
   "agents": [
@@ -9,14 +9,15 @@
       "company": "Warp",
       "category": "Agentic terminal / dev environment",
       "sourceUrl": "https://www.warp.dev/pricing",
-      "lastVerified": "2026-06-16",
-      "verified": false,
-      "limitsVerified": false,
+      "lastVerified": "2026-06-27",
+      "verified": true,
+      "limitsVerified": true,
       "plans": [
-        { "name": "Free", "monthlyUSD": 0, "billing": "user", "limit": "150 AI requests", "reset": "Monthly", "highlights": "Limited AI requests per month" },
-        { "name": "Pro", "monthlyUSD": 20, "billing": "user", "limit": "2,500 AI requests", "reset": "Monthly", "highlights": "Higher AI request limits" },
-        { "name": "Turbo", "monthlyUSD": 50, "billing": "user", "limit": "10,000 AI requests", "reset": "Monthly", "highlights": "Largest AI request allowance" },
-        { "name": "Enterprise", "monthlyUSD": null, "billing": "user", "priceLabel": "Custom", "limit": "Custom / volume", "reset": "Custom", "highlights": "SSO, admin controls, volume pricing" }
+        { "name": "Free", "monthlyUSD": 0, "billing": "user", "audience": "individual", "limit": "75 credits/mo (150 first 2 mo)", "reset": "Monthly", "highlights": "Core terminal; bring-your-own AI inference" },
+        { "name": "Build", "monthlyUSD": 20, "billing": "user", "audience": "individual", "limit": "1,500 credits", "reset": "Monthly", "highlights": "Recommended; full Warp Agent; BYOK; pay-as-you-go reload credits" },
+        { "name": "Max", "monthlyUSD": 200, "billing": "user", "audience": "individual", "limit": "~12x Build credits", "reset": "Monthly", "highlights": "Maximum AI capacity" },
+        { "name": "Business", "monthlyUSD": 50, "billing": "user", "audience": "business", "limit": "1,500 credits / user", "reset": "Monthly", "highlights": "Team plan; SSO, ZDR, shared reload credits (up to 50 seats)" },
+        { "name": "Enterprise", "monthlyUSD": null, "billing": "user", "audience": "business", "priceLabel": "Custom", "limit": "Custom / shared credit pools", "reset": "Custom", "highlights": "Unlimited seats, BYO LLM, self-hosted agents" }
       ]
     },
     {
