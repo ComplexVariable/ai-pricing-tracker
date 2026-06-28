@@ -1,7 +1,7 @@
 {
   "lastUpdated": "2026-06-27",
   "currency": "USD",
-  "note": "Curated subscription pricing for AI coding agents. These products bill by plan (per seat / per month), not per token, so they are NOT directly comparable to the live per-token model table. 'limit' is each vendor's OWN allowance unit (premium requests, AI requests, messages, usage credits, or relative multipliers) — NOT tokens — and units are not comparable across vendors. Allowance/reset values are best-effort estimates pending manual confirmation. Always confirm at the source.",
+  "note": "Curated subscription pricing for AI coding agents. These products bill by plan (per seat / per month), not per token, so they are NOT directly comparable to the live per-token model table. 'limit' is each vendor's OWN allowance unit (premium requests, AI requests, messages, usage credits, or relative multipliers) — NOT tokens — and units are not comparable across vendors. 'audience' tags each plan as individual or business (team/enterprise). Allowance/reset values are best-effort estimates pending manual confirmation. Always confirm at the source.",
   "agents": [
     {
       "id": "warp",
@@ -30,10 +30,10 @@
       "verified": true,
       "limitsVerified": false,
       "plans": [
-        { "name": "Hobby", "monthlyUSD": 0, "billing": "user", "limit": "Limited agent usage (Pro trial)", "reset": "Monthly", "highlights": "Free tier with limited usage" },
-        { "name": "Pro", "monthlyUSD": 20, "billing": "user", "limit": "~$20 included model usage", "reset": "Monthly", "highlights": "Individual paid plan" },
-        { "name": "Ultra", "monthlyUSD": 200, "billing": "user", "limit": "~20x Pro usage", "reset": "Monthly", "highlights": "Max usage limits for power users" },
-        { "name": "Teams / Business", "monthlyUSD": 40, "billing": "user", "limit": "Per-seat usage + pooling", "reset": "Monthly", "highlights": "Centralized billing, admin, privacy mode" }
+        { "name": "Hobby", "monthlyUSD": 0, "billing": "user", "audience": "individual", "limit": "Limited agent usage (Pro trial)", "reset": "Monthly", "highlights": "Free tier with limited usage" },
+        { "name": "Pro", "monthlyUSD": 20, "billing": "user", "audience": "individual", "limit": "~$20 included model usage", "reset": "Monthly", "highlights": "Individual paid plan" },
+        { "name": "Ultra", "monthlyUSD": 200, "billing": "user", "audience": "individual", "limit": "~20x Pro usage", "reset": "Monthly", "highlights": "Max usage limits for power users" },
+        { "name": "Teams / Business", "monthlyUSD": 40, "billing": "user", "audience": "business", "limit": "Per-seat usage + pooling", "reset": "Monthly", "highlights": "Centralized billing, admin, privacy mode" }
       ]
     },
     {
@@ -46,11 +46,11 @@
       "verified": true,
       "limitsVerified": false,
       "plans": [
-        { "name": "Free", "monthlyUSD": 0, "billing": "user", "limit": "50 premium req + 2,000 completions", "reset": "Monthly", "highlights": "Limited completions & chat" },
-        { "name": "Pro", "monthlyUSD": 10, "billing": "user", "limit": "300 premium req; unlimited base", "reset": "Monthly", "highlights": "Individual; ~$100/yr if billed annually" },
-        { "name": "Pro+", "monthlyUSD": 39, "billing": "user", "limit": "1,500 premium req", "reset": "Monthly", "highlights": "More premium-model requests" },
-        { "name": "Business", "monthlyUSD": 19, "billing": "user", "limit": "300 premium req / user", "reset": "Monthly", "highlights": "Org management & policy controls" },
-        { "name": "Enterprise", "monthlyUSD": 39, "billing": "user", "limit": "1,000 premium req / user", "reset": "Monthly", "highlights": "Advanced enterprise features" }
+        { "name": "Free", "monthlyUSD": 0, "billing": "user", "audience": "individual", "limit": "50 premium req + 2,000 completions", "reset": "Monthly", "highlights": "Limited completions & chat" },
+        { "name": "Pro", "monthlyUSD": 10, "billing": "user", "audience": "individual", "limit": "300 premium req; unlimited base", "reset": "Monthly", "highlights": "Individual; ~$100/yr if billed annually" },
+        { "name": "Pro+", "monthlyUSD": 39, "billing": "user", "audience": "individual", "limit": "1,500 premium req", "reset": "Monthly", "highlights": "More premium-model requests" },
+        { "name": "Business", "monthlyUSD": 19, "billing": "user", "audience": "business", "limit": "300 premium req / user", "reset": "Monthly", "highlights": "Org management & policy controls" },
+        { "name": "Enterprise", "monthlyUSD": 39, "billing": "user", "audience": "business", "limit": "1,000 premium req / user", "reset": "Monthly", "highlights": "Advanced enterprise features" }
       ]
     },
     {
@@ -63,9 +63,9 @@
       "verified": false,
       "limitsVerified": false,
       "plans": [
-        { "name": "ChatGPT Plus", "monthlyUSD": 20, "billing": "user", "limit": "Message caps per ~3-5h window", "reset": "Rolling (hours)", "highlights": "Codex included with ChatGPT Plus" },
-        { "name": "ChatGPT Pro", "monthlyUSD": 200, "billing": "user", "limit": "Near-unlimited (fair use)", "reset": "Rolling (hours)", "highlights": "Highest Codex usage limits" },
-        { "name": "API (pay-as-you-go)", "monthlyUSD": null, "billing": "usage", "priceLabel": "Usage-based", "limit": "Pay per token (no cap)", "reset": "n/a", "highlights": "Per-token billing — see the live token table" }
+        { "name": "ChatGPT Plus", "monthlyUSD": 20, "billing": "user", "audience": "individual", "limit": "Message caps per ~3-5h window", "reset": "Rolling (hours)", "highlights": "Codex included with ChatGPT Plus" },
+        { "name": "ChatGPT Pro", "monthlyUSD": 200, "billing": "user", "audience": "individual", "limit": "Near-unlimited (fair use)", "reset": "Rolling (hours)", "highlights": "Highest Codex usage limits" },
+        { "name": "API (pay-as-you-go)", "monthlyUSD": null, "billing": "usage", "audience": "individual", "priceLabel": "Usage-based", "limit": "Pay per token (no cap)", "reset": "n/a", "highlights": "Per-token billing — see the live token table" }
       ]
     },
     {
@@ -78,12 +78,12 @@
       "verified": false,
       "limitsVerified": false,
       "plans": [
-        { "name": "Free", "monthlyUSD": 0, "billing": "user", "limit": "Limited messages / day", "reset": "Daily (rolling)", "highlights": "Limited daily usage" },
-        { "name": "Pro", "monthlyUSD": 20, "billing": "user", "limit": "~5x Free; Claude Code usage", "reset": "Rolling 5h + weekly", "highlights": "Claude Code included; ~$17/mo billed annually" },
-        { "name": "Max (5x)", "monthlyUSD": 100, "billing": "user", "limit": "5x Pro usage", "reset": "Rolling 5h + weekly", "highlights": "5x Pro usage" },
-        { "name": "Max (20x)", "monthlyUSD": 200, "billing": "user", "limit": "20x Pro usage", "reset": "Rolling 5h + weekly", "highlights": "20x Pro usage" },
-        { "name": "Team", "monthlyUSD": 30, "billing": "user", "limit": "Higher pooled usage / seat", "reset": "Rolling + monthly", "highlights": "~$25/user billed annually; min 5 seats" },
-        { "name": "Enterprise", "monthlyUSD": null, "billing": "user", "priceLabel": "Custom", "limit": "Custom limits", "reset": "Custom", "highlights": "SSO, admin controls, custom limits" }
+        { "name": "Free", "monthlyUSD": 0, "billing": "user", "audience": "individual", "limit": "Limited messages / day", "reset": "Daily (rolling)", "highlights": "Limited daily usage" },
+        { "name": "Pro", "monthlyUSD": 20, "billing": "user", "audience": "individual", "limit": "~5x Free; Claude Code usage", "reset": "Rolling 5h + weekly", "highlights": "Claude Code included; ~$17/mo billed annually" },
+        { "name": "Max (5x)", "monthlyUSD": 100, "billing": "user", "audience": "individual", "limit": "5x Pro usage", "reset": "Rolling 5h + weekly", "highlights": "5x Pro usage" },
+        { "name": "Max (20x)", "monthlyUSD": 200, "billing": "user", "audience": "individual", "limit": "20x Pro usage", "reset": "Rolling 5h + weekly", "highlights": "20x Pro usage" },
+        { "name": "Team", "monthlyUSD": 30, "billing": "user", "audience": "business", "limit": "Higher pooled usage / seat", "reset": "Rolling + monthly", "highlights": "~$25/user billed annually; min 5 seats" },
+        { "name": "Enterprise", "monthlyUSD": null, "billing": "user", "audience": "business", "priceLabel": "Custom", "limit": "Custom limits", "reset": "Custom", "highlights": "SSO, admin controls, custom limits" }
       ]
     }
   ]
