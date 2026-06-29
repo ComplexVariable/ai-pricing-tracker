@@ -1,5 +1,5 @@
 {
-  "lastChecked": "2026-06-16T11:20:55.844Z",
+  "lastChecked": "2026-06-29T15:55:02.528Z",
   "agents": {
     "warp": {
       "sourceUrl": "https://www.warp.dev/pricing",
@@ -8,25 +8,27 @@
         1,
         2,
         3,
-        4,
-        5,
-        6,
         7,
+        9,
         10,
+        11,
         18,
         20,
-        22,
-        26,
+        21,
+        24,
+        25,
         32,
         33,
         45,
         50,
+        62,
+        64,
         100,
         180,
         200
       ],
-      "contentHash": "6a53a3bc0bbc1b49",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "contentHash": "6ab6c757b9429a48",
+      "lastChecked": "2026-06-29T15:55:02.528Z",
       "error": null
     },
     "cursor": {
@@ -37,11 +39,11 @@
         3,
         17,
         20,
-        26,
+        28,
         40
       ],
-      "contentHash": "797f54240a82897c",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "contentHash": "e23ab94414ab0912",
+      "lastChecked": "2026-06-29T15:55:02.528Z",
       "error": null
     },
     "copilot": {
@@ -60,7 +62,7 @@
         200
       ],
       "contentHash": "b6e145af54512af8",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "lastChecked": "2026-06-29T15:55:02.528Z",
       "error": null
     },
     "codex-cli": {
@@ -68,7 +70,7 @@
       "status": 403,
       "detectedPrices": [],
       "contentHash": "",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "lastChecked": "2026-06-29T15:55:02.528Z",
       "error": null
     },
     "claude": {
@@ -88,7 +90,7 @@
         200
       ],
       "contentHash": "2e49a36e1026a760",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "lastChecked": "2026-06-29T15:55:02.528Z",
       "error": null
     }
   }
