@@ -1,32 +1,43 @@
 {
-  "lastChecked": "2026-06-16T11:20:55.844Z",
+  "lastChecked": "2026-10-07T10:13:18.499Z",
   "agents": {
     "warp": {
       "sourceUrl": "https://www.warp.dev/pricing",
       "status": 200,
       "detectedPrices": [
         1,
-        2,
-        3,
-        4,
-        5,
-        6,
         7,
+        9,
         10,
+        12,
         18,
         20,
         22,
-        26,
-        32,
-        33,
+        23,
+        24,
         45,
         50,
+        60,
+        78,
+        80,
+        81,
+        84,
+        85,
+        86,
+        87,
+        91,
+        92,
+        93,
+        94,
+        96,
         100,
+        120,
         180,
-        200
+        200,
+        240
       ],
-      "contentHash": "6a53a3bc0bbc1b49",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "contentHash": "b88f8425154f9c42",
+      "lastChecked": "2026-10-07T10:13:18.499Z",
       "error": null
     },
     "cursor": {
@@ -34,14 +45,16 @@
       "status": 200,
       "detectedPrices": [
         1,
+        2,
         3,
-        17,
+        10,
+        18,
         20,
-        26,
+        22,
         40
       ],
-      "contentHash": "797f54240a82897c",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "contentHash": "db0413c72b0130b2",
+      "lastChecked": "2026-10-07T10:13:18.499Z",
       "error": null
     },
     "copilot": {
@@ -60,7 +73,7 @@
         200
       ],
       "contentHash": "b6e145af54512af8",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "lastChecked": "2026-10-07T10:13:18.499Z",
       "error": null
     },
     "codex-cli": {
@@ -68,7 +81,7 @@
       "status": 403,
       "detectedPrices": [],
       "contentHash": "",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "lastChecked": "2026-10-07T10:13:18.499Z",
       "error": null
     },
     "claude": {
@@ -77,18 +90,38 @@
       "detectedPrices": [
         0.05,
         0.08,
+        0.1,
+        0.2,
+        0.25,
+        0.3,
+        0.5,
         1,
+        1.25,
+        2,
+        2.5,
+        3,
+        3.75,
+        4,
         5,
+        6.25,
+        8,
         10,
+        11,
+        12.5,
+        13,
+        15,
         17,
         20,
+        22,
         25,
+        40,
+        50,
         100,
         125,
         200
       ],
-      "contentHash": "2e49a36e1026a760",
-      "lastChecked": "2026-06-16T11:20:55.844Z",
+      "contentHash": "9a5696177a7fd095",
+      "lastChecked": "2026-10-07T10:13:18.499Z",
       "error": null
     }
   }
